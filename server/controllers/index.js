@@ -20,11 +20,13 @@ module.exports = {
       // call models.get to read everything from the server
     }, // a function which handles a get request for all messages
     post: function (req, res) {
-      req.on('data', (data) => {
-        models.messages.post(data);
-      console.log(req);
+      models.messages.post(req.body, function(data) {
+        var statusCode = 201;
+        res.writeHead(statusCode, headers);
+        res.end();
+      });
       //write
-      }) // a function which handles posting a message to the database
+     // a function which handles posting a message to the database
     }
   },
 
@@ -38,7 +40,6 @@ module.exports = {
       })
     },
     post: function (req, res) {
-      console.log(req.body);
       models.users.post(req.body, function(data) {
         var statusCode = 201;
         res.writeHead(statusCode, headers);

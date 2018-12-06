@@ -1,19 +1,20 @@
 DROP DATABASE chat;
-
 CREATE DATABASE chat;
 
 USE chat;
 
 CREATE TABLE rooms (
   roomID INTEGER NOT NULL AUTO_INCREMENT,
-  roomname TEXT NOT NULL,
-  PRIMARY KEY (roomID)
+  roomname varchar(255) NOT NULL,
+  PRIMARY KEY (roomID),
+  UNIQUE (roomname)
 );
 
 CREATE TABLE users (
   userID INTEGER NOT NULL AUTO_INCREMENT,
-  username TEXT NOT NULL,
-  PRIMARY KEY (userID)
+  username varchar(255) NOT NULL,
+  PRIMARY KEY (userID),
+  UNIQUE (username)
 );
 
 CREATE TABLE messages (
