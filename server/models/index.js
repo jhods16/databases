@@ -6,10 +6,9 @@ module.exports = {
       // query db
       dbConnect = db.dbConnection;
       // dbConnect.connect();
-      var queryString = 'SELECT * FROM messages';
+      var queryString = 'SELECT users.username, messages.message, rooms.roomname FROM messages INNER JOIN users ON users.userID = messages.userID INNER JOIN rooms ON rooms.roomID = messages.roomID;';
       var queryArgs = [];
       dbConnect.query(queryString, queryArgs, function(err, results) {
-        var queryString = 'SELECT * FROM users';
         
         callback(results);
         // });
@@ -20,13 +19,19 @@ module.exports = {
       // add row(s) to relevant dbs
       dbConnect = db.dbConnection;
       // dbConnect.connect();
-      console.log(body);
-      var queryString = `INSERT INTO messages (userID, message, roomID) VALUES ((SELECT userID from users WHERE username = '${body.username}'), '${body.message}', (SELECT roomID from rooms WHERE roomname = '${body.roomname}'));`;
+      console.log('inside message post', body);
+      var queryString = `INSERT INTO rooms (roomname) VALUES ('${body.roomname}');`;
       var queryArgs = [];
       dbConnect.query(queryString, queryArgs, function(err, results) {
-        console.log(queryString);
-        callback();
+        var secondQueryString = `INSERT INTO users (username) VALUES ('${body.username}');`;
+        dbConnect.query(secondQueryString, queryArgs, function(err, results) {
+          var thirdQueryString = `INSERT INTO messages (userID, message, roomID) VALUES ((SELECT userID from users WHERE username = '${body.username}'), '${body.message}', (SELECT roomID from rooms WHERE roomname = '${body.roomname}'));`;
+          dbConnect.query(thirdQueryString, queryArgs, function(err, results) {
+           callback(body);
+          })
+        });
       });
+      
     } // a function which can be used to insert a message into the database
   },
 

@@ -4,28 +4,34 @@ CREATE DATABASE chat;
 USE chat;
 
 CREATE TABLE rooms (
-  roomID INTEGER NOT NULL AUTO_INCREMENT,
+  id INTEGER NOT NULL AUTO_INCREMENT,
   roomname varchar(255) NOT NULL,
-  PRIMARY KEY (roomID),
+  createdAt varchar(255),
+  updatedAt varchar(255),
+  PRIMARY KEY (id),
   UNIQUE (roomname)
 );
 
 CREATE TABLE users (
-  userID INTEGER NOT NULL AUTO_INCREMENT,
+  id INTEGER NOT NULL AUTO_INCREMENT,
   username varchar(255) NOT NULL,
-  PRIMARY KEY (userID),
+  createdAt varchar(255),
+  updatedAt varchar(255),
+  PRIMARY KEY (id),
   UNIQUE (username)
 );
 
 CREATE TABLE messages (
   /* Describe your table here.*/
-  messageID INTEGER NOT NULL AUTO_INCREMENT,
+  id INTEGER NOT NULL AUTO_INCREMENT,
   userID INTEGER,
-  message TEXT NOT NULL,
+  message varchar(255) NOT NULL,
   roomID INTEGER,
-  PRIMARY KEY (messageID),
-  FOREIGN KEY (roomID) REFERENCES rooms(roomID),
-  FOREIGN KEY (userID) REFERENCES users(userID)
+  createdAt varchar(255),
+  updatedAt varchar(255),
+  PRIMARY KEY (id),
+  FOREIGN KEY (roomID) REFERENCES rooms(id),
+  FOREIGN KEY (userID) REFERENCES users(id)
 );
 
 /* Create other tables and define schemas for them here! */

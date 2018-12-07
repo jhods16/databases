@@ -7,5 +7,6 @@ var mysql = require('mysql');
 exports.dbConnection = mysql.createConnection({
   user: 'student',
   password: 'student',
-  database: 'chat'
+  database: 'chat',
+  multipleStatements: true
 });
