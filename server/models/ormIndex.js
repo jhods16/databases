@@ -16,16 +16,34 @@ var messages = db.define('messages', {
   roomID: Sequelize.INTEGER
 });
 
+messages.belongsTo(users, {foreignKey: 'userID'})
+messages.belongsTo(rooms, {foreignKey: 'roomID'})
+
 module.exports = {
   messages: {
     get: function(callback) {
-        console.log('in messages.get')
-        messages.findAll()
+        messages.findAll({
+            include: [
+                {
+                    model: users
+                },
+                {
+                    model: rooms
+                }
+            ]
+        })
             .then(function(messages) {
-                messages.forEach(function(message) {
-                    console.log(message + ' exists');
+                var resObj = messages.map(function(message) {
+                    return Object.assign(
+                        {},
+                        {
+                            username: message.user.dataValues.username,
+                            message: message.message,
+                            roomname: message.room.dataValues.roomname
+                        }
+                    )
                 });
-                callback(messages);
+                callback(resObj);
             })
        }, // a function which produces all the messages
     post: function (body, callback) {
@@ -62,12 +80,8 @@ module.exports = {
   users: {
     // Ditto as above.
     get: function(callback) {
-        console.log('in users.get')
         users.findAll()
             .then(function(users) {
-                users.forEach(function(user) {
-                    console.log(user + ' exists');
-                });
                 callback(users);
             })
        },
@@ -87,4 +101,3 @@ module.exports = {
     }
   }
 };
-

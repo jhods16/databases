@@ -1,4 +1,4 @@
-var models = require('../models/ormindex.js');
+var models = require('../models/ormIndex.js');
 var headers = {
   'access-control-allow-origin': '*',
   'access-control-allow-methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -23,7 +23,6 @@ module.exports = {
       models.messages.post(req.body, function(data) {
         var statusCode = 201;
         res.writeHead(statusCode, headers);
-        console.log('inside controller', data)
         res.end(JSON.stringify(data));
       });
       //write
