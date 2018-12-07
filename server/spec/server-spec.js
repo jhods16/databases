@@ -86,4 +86,35 @@ describe('Persistent Node Chat Server', function() {
       });
     });
   });
+
+  it('Should output correct username', function(done) {
+       var queryString = `INSERT INTO messages (userID,message,roomID) VALUES (1,'my name is the coolest',1)`;
+       var queryArgs = [];
+
+    dbConnection.query(queryString, queryArgs, function(err) {
+      if (err) { throw err; }
+
+      request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
+        var messageLog = JSON.parse(body);
+        expect(messageLog[0].username).to.equal('Valjean');
+        done();
+      });
+    });    
+  });
+
+  it('Should receive POST requests', function(done) {
+      var requestParams = {
+        method: 'POST',
+        uri: 'http://127.0.0.1:3000/classes/messages',
+        json: {
+            username: 'Will Smith',
+            message: 'Fresh Prince',
+            roomname: 'Bel Air'
+          }
+      };
+      request(requestParams, function(error, response, body) {
+        expect(response.statusCode).to.equal(201);
+        done();
+      });  
+})
 });
